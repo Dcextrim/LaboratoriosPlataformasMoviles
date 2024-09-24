@@ -1,76 +1,84 @@
 package com.uvg.laboratorio4
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.uvg.laboratorio4.ui.theme.Laboratorio4Theme
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Ajustescreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Título
-        Text(
-            text = "Settings",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
-        )
+fun Ajustescreen(navController: NavController, modifier: Modifier = Modifier) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Settings",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                actions = {
+                    Image(
+                        painter = painterResource(id = R.drawable.equis),
+                        contentDescription = "Cerrar",
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable {
+                                navController.popBackStack() // Acción para regresar
+                            }
+                            .size(24.dp)
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+            )
+        },
+        content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp)
+            ) {
+                // Opciones de la lista con íconos
+                Ajustesformato(title = "Edit Profile", imageResourceId = R.drawable.perfil)
+                Ajustesformato(title = "Email Addresses", imageResourceId = R.drawable.correo)
+                Ajustesformato(title = "Notifications", imageResourceId = R.drawable.notificacion)
+                Ajustesformato(title = "Privacy", imageResourceId = R.drawable.privacidad)
 
-        // Opciones de la lista con íconos
-        Ajustesformato(title = "Edit Profile", imageResourceId = R.drawable.perfil)
-        Ajustesformato(title = "Email Addresses", imageResourceId = R.drawable.correo)
-        Ajustesformato(title = "Notifications", imageResourceId = R.drawable.notificacion)
-        Ajustesformato(title = "Privacy", imageResourceId = R.drawable.privacidad)
+                Column {
+                    Ajustesformato(title = "Help & Feedback", imageResourceId = R.drawable.ayuda)
+                    Text("Troubleshooting tips and guides", fontSize = 14.sp)
+                }
+                Column {
+                    Ajustesformato(title = "About", imageResourceId = R.drawable.acerca)
+                    Text("App Information and Documents", fontSize = 14.sp)
+                }
 
-        Column {
-            Ajustesformato(title = "Help & Feedback", imageResourceId = R.drawable.ayuda)
-            Text("Troubleshooting tips and guides")
+                // Espacio para Logout
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Botón de Logout
+                TextButton(
+                    onClick = { /* Acción de Logout */ },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Logout", color = Color.Red)
+                }
+            }
         }
-        Column{
-            Ajustesformato(title = "About", imageResourceId = R.drawable.acerca)
-            Text("App Information and Documents")
-
-        }
-
-
-        // Espacio para Logout
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Botón de Logout
-        TextButton(
-            onClick = { /* Acción de Logout */ },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Logout", color = Color.Red)
-        }
-    }
+    )
 }
 
 @Composable
@@ -98,11 +106,10 @@ fun Ajustesformato(title: String, imageResourceId: Int) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun Previewspantallas() {
+fun PreviewSettings() {
     Laboratorio4Theme {
-        Ajustescreen()
+        Ajustescreen(rememberNavController())
     }
 }
